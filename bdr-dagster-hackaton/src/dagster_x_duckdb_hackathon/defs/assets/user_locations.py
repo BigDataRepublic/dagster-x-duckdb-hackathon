@@ -1,5 +1,5 @@
 import dagster as dg
 
 
-@dg.asset(group_name="bronze")
+@dg.asset()
 def user_locations(context: dg.AssetExecutionContext) -> dg.MaterializeResult: ...

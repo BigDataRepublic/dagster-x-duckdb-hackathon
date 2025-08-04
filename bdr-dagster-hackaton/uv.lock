@@ -75,41 +75,6 @@ wheels = [
 ]
 
 [[package]]
-name = "bdr-dagster-hackaton"
-version = "0.1.0"
-source = { editable = "." }
-dependencies = [
-    { name = "dagster" },
-    { name = "dagster-duckdb" },
-    { name = "dagster-duckdb-pandas" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "dagster-dg-cli", extra = ["local"] },
-    { name = "dagster-webserver" },
-    { name = "pytest" },
-    { name = "pytest-cov" },
-    { name = "ruff" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "dagster", specifier = "==1.10.19" },
-    { name = "dagster-duckdb", specifier = ">=0.26.19" },
-    { name = "dagster-duckdb-pandas", specifier = ">=0.26.19" },
-]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "dagster-dg-cli", extras = ["local"] },
-    { name = "dagster-webserver" },
-    { name = "pytest", specifier = ">=8.4.0" },
-    { name = "pytest-cov", specifier = ">=6.1.1" },
-    { name = "ruff", specifier = ">=0.11.13" },
-]
-
-[[package]]
 name = "certifi"
 version = "2025.4.26"
 source = { registry = "https://pypi.org/simple" }
@@ -575,6 +540,41 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/18/2a/3fed5fb99a6f050ba48a46634ddae52ccee93fa77a348b0a39dff9305d9f/dagster_webserver-1.10.19.tar.gz", hash = "sha256:c2dceb5a28166a4dd53a66daab393274c6f7c78b27dbd3d9ae2835e063d3047a", size = 12924897 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/e8/e1/0e7af2d2e4f7d6f7cd786b7671e6260e41e84ce16e211d46d440518a605c/dagster_webserver-1.10.19-py3-none-any.whl", hash = "sha256:834552bbbf104ba973184a7dedf1cbfe888a30b4d65b6e8156ff79b410806a2b", size = 13294194 },
+]
+
+[[package]]
+name = "dagster-x-duckdb-hackathon"
+version = "0.1.0"
+source = { editable = "." }
+dependencies = [
+    { name = "dagster" },
+    { name = "dagster-duckdb" },
+    { name = "dagster-duckdb-pandas" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "dagster-dg-cli", extra = ["local"] },
+    { name = "dagster-webserver" },
+    { name = "pytest" },
+    { name = "pytest-cov" },
+    { name = "ruff" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "dagster", specifier = "==1.10.19" },
+    { name = "dagster-duckdb", specifier = ">=0.26.19" },
+    { name = "dagster-duckdb-pandas", specifier = ">=0.26.19" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "dagster-dg-cli", extras = ["local"] },
+    { name = "dagster-webserver" },
+    { name = "pytest", specifier = ">=8.4.0" },
+    { name = "pytest-cov", specifier = ">=6.1.1" },
+    { name = "ruff", specifier = ">=0.11.13" },
 ]
 
 [[package]]

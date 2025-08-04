@@ -3,7 +3,7 @@ import pandas as pd
 from dagster_duckdb import DuckDBResource
 
 
-@dg.asset(group_name="bronze")
+@dg.asset()
 def travel_plans(duckdb: DuckDBResource) -> dg.MaterializeResult:
     iris_df = pd.read_csv(
         "https://docs.dagster.io/assets/iris.csv",

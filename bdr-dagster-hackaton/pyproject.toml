@@ -1,5 +1,5 @@
 [project]
-name = "bdr_dagster_hackaton"
+name = "dagster_x_duckdb_hackathon"
 requires-python = ">=3.9,<3.13"
 version = "0.1.0"
 dependencies = [
@@ -25,7 +25,7 @@ build-backend = "hatchling.build"
 directory_type = "project"
 
 [tool.dg.project]
-root_module = "bdr_dagster_hackaton"
+root_module = "dagster_x_duckdb_hackathon"
 autoload_defs = true
 
 
