@@ -16,6 +16,8 @@ dev = [
     "pytest>=8.4.0",
     "pytest-cov>=6.1.1",
     "marimo>=0.14.16",
+    "faker>=37.5.3",
+    "polars>=1.32.2",
 ]
 
 [build-system]

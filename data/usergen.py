@@ -24,7 +24,7 @@ def _(mo):
 
 
 @app.cell
-def _(citypop, faker, np):
+def _(citypop, faker, np, pl):
     import dataclasses
     import datetime
     from enum import StrEnum, auto
@@ -45,6 +45,8 @@ def _(citypop, faker, np):
         sex: Sex
         date_of_birth: datetime.date
         hometown: str
+        latitude: float
+        longitude: float
 
 
     def generate_users(n: int):
@@ -64,26 +66,22 @@ def _(citypop, faker, np):
 
             last_name = fake.last_name()
             date_of_birth = today - datetime.timedelta(days=np.random.randint(18 * 365, 80 * 365))
-            hometown = np.random.choice(citypop["city_name"], p=citypop["population_perc"])
+            index = np.random.choice(range(len(citypop)), p=citypop["population_perc"])
+            row = citypop.row(index, named=True)
+            hometown, latitude, longitude = row["city_name"], row["latitude"], row["longitude"]
 
             users.append(
-                User(first_name=first_name, last_name=last_name, sex=sex, date_of_birth=date_of_birth, hometown=hometown)
+                User(first_name=first_name, last_name=last_name, sex=sex, date_of_birth=date_of_birth, hometown=hometown,latitude=latitude, longitude=longitude,)
             )
 
-        return users
+        return pl.DataFrame(users)
     return (generate_users,)
 
 
 @app.cell
 def _(generate_users):
     users = generate_users(10000)
-    return (users,)
-
-
-@app.cell
-def _(pl, users):
-    users_df = pl.DataFrame(users)
-    users_df.write_csv("data/users.csv")
+    users.write_csv('data/users.csv')
     return
 
 

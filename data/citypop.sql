@@ -1,6 +1,6 @@
 load spatial;
 
-create table citypop as 
+COPY (
     with source as (
         select
         * exclude geom,
@@ -11,11 +11,9 @@ create table citypop as
         URAU_CODE,
         population::int as population,
         pop_year::int as population_year,
-        city_NAM_1 as city_name,
+        regexp_replace(city_NAM_1, '[\r\n]', '') as city_name,
         st_x(geom) as latitude,
         st_y(geom) as longitude,
         -- st_point(st_x(geom), st_y(geom)) as geom
-    from source;
-
-show all tables;
-COPY (select * from citypop) TO 'data/citypop.csv';
+    from source
+) TO 'data/citypop.csv';
