@@ -14,7 +14,7 @@ def airports(duckdb: DuckDBResource) -> None:
                      """)
 
 
-@dg.asset(deps=[airports], kinds={"duckdb", "bronze"}, group_name="airports")
+@dg.asset(deps=[airports], kinds={"duckdb", "silver"}, group_name="airports")
 def eu_airports(duckdb: DuckDBResource) -> None:
     with duckdb.get_connection() as conn:
         conn.execute("""
