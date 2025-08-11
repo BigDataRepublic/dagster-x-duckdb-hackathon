@@ -2,7 +2,7 @@ import dagster as dg
 from dagster_duckdb import DuckDBResource
 
 
-@dg.asset(kinds={"duckdb"})
+@dg.asset(kinds={"duckdb", "bronze"}, group_name="destinations")
 def destinations(duckdb: DuckDBResource) -> None:
     with duckdb.get_connection() as conn:
         conn.execute("""

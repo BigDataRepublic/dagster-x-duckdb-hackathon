@@ -19,6 +19,6 @@ def resources() -> dg.Definitions:
         resources={
             "duckdb": DuckDBSpatialResource(
                 database="db.duckdb",
-            )
+            ),
         }
     )

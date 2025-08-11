@@ -1,8 +1,18 @@
+from hashlib import sha256
+from pathlib import Path
+
 import dagster as dg
 from dagster_duckdb import DuckDBResource
 
 
-@dg.asset(kinds={"duckdb"})
+@dg.observable_source_asset(group_name="users")
+def users_file():
+    content = Path("data/users.csv").read_text()
+    content_hash = sha256(content.encode()).hexdigest()
+    return dg.DataVersion(content_hash)
+
+
+@dg.asset(kinds={"duckdb", "bronze"}, deps=[users_file], group_name="users")
 def users(duckdb: DuckDBResource) -> None:
     with duckdb.get_connection() as conn:
         conn.execute("""
@@ -14,6 +24,9 @@ def users(duckdb: DuckDBResource) -> None:
                             sex,
                             date_of_birth::date as date_of_birth,
                             hometown,
-                            st_point(longitude::double, latitude::double) as geom
+                            st_point(longitude::double, latitude::double) as geom,
+                            preferred_temperature,
+                            preferred_travel_time,
+                            preferred_transport_mode
                         FROM 'data/users.csv'
                      """)
