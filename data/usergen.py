@@ -110,7 +110,7 @@ def _(citypop, faker, np, pl):
 
 @app.cell
 def _(generate_users):
-    users = generate_users(1000)
+    users = generate_users(10000)
     users.write_csv('data/users.csv')
     return
 

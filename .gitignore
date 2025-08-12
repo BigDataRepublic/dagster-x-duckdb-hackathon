@@ -1,4 +1,6 @@
 .tmp*
+data/weather/*
+db.duckdb.tmp
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

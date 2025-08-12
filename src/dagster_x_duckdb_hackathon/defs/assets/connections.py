@@ -77,11 +77,10 @@ def connections_train_stations(context, duckdb: DuckDBResource) -> None:
         conn.execute("""
                      CREATE OR REPLACE TABLE connections_train_stations AS
                         SELECT DISTINCT
-                            o.train_station_id as origin_id,
-                            d.train_station_id as destination_id,
+                            o.user_id,
+                            d.destination_id,
                             ST_Distance_Sphere(o.geom, d.geom) as connection_distance,
                             'train' as transport_mode,
-                            'test' as test,
                             connection_distance / 1000 / 100 as travel_time
                         FROM
                             user_train_stations o CROSS JOIN destination_train_stations d
@@ -97,8 +96,8 @@ def connections_airports(context, duckdb: DuckDBResource) -> None:
         conn.execute("""
                      CREATE OR REPLACE TABLE connections_airports AS
                         SELECT DISTINCT
-                            o.airport_id as origin_id,
-                            d.airport_id as destination_id,
+                            o.user_id,
+                            d.destination_id,
                             ST_Distance_Sphere(o.geom, d.geom) as connection_distance,
                             'flight' as transport_mode,
                             connection_distance / 1000 / 500 as travel_time

@@ -1,6 +1,5 @@
 from contextlib import contextmanager
 
-import dagster as dg
 from dagster_duckdb import DuckDBResource
 
 
@@ -11,14 +10,3 @@ class DuckDBSpatialResource(DuckDBResource):
             conn.execute("INSTALL spatial;")
             conn.execute("LOAD spatial;")
             yield conn
-
-
-@dg.definitions
-def resources() -> dg.Definitions:
-    return dg.Definitions(
-        resources={
-            "duckdb": DuckDBSpatialResource(
-                database="db.duckdb",
-            ),
-        }
-    )

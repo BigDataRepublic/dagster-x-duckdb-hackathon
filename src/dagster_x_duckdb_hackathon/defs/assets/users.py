@@ -13,7 +13,7 @@ def users_file():
 
 
 @dg.asset(kinds={"duckdb", "bronze"}, deps=[users_file], group_name="users")
-def users(duckdb: DuckDBResource) -> None:
+def users(duckdb: DuckDBResource) -> dg.MaterializeResult:
     with duckdb.get_connection() as conn:
         conn.execute("""
                      CREATE OR REPLACE TABLE users AS
@@ -30,3 +30,8 @@ def users(duckdb: DuckDBResource) -> None:
                             preferred_transport_mode
                         FROM 'data/users.csv'
                      """)
+
+        df = conn.execute("SELECT * FROM users LIMIT 10").df()
+        count = conn.execute("SELECT count(*) FROM users").fetchone() or (0,)
+        count = count[0]
+        return dg.MaterializeResult(metadata={"preview": dg.MetadataValue.md(df.to_markdown()), "rows": count})
