@@ -16,7 +16,7 @@ def _():
 
     DATABASE_URL = "db.duckdb"
     engine = duckdb.connect(DATABASE_URL, read_only=True)
-    engine.execute("load spatial;")
+    engine.execute("load spatial;");
     return (engine,)
 
 
@@ -36,36 +36,39 @@ def _(engine, mo):
 def _(engine, mo, users):
     user_locations = mo.sql(
         f"""
-        select id, st_y(geom) as lat, st_x(geom) as lon from users;
+        select id, first_name || ' ' || last_name as name, st_y(geom) as lat, st_x(geom) as lon from users;
         """,
+        output=False,
         engine=engine
     )
-    return
-
-
-app._unparsable_cell(
-    r"""
-    user_fig = go.Figure(go.Scatter(y=user_locations[\"lat\"], x=user_locations[\"lon\"], opacity=0.5, mode))
-   
-    user_fig.update_layout(
-        showlegend=False,
-        margin=dict(l=0, r=0, t=0, b=0),
-        mapbox=dict(
-            center=dict(lon=52, lat=2),
-            zoom=10                           
-        )
-    )
-    user_map = mo.ui.plotly(user_fig)
-    user_map
-    """,
-    name="_"
-)
+    return (user_locations,)
 
 
 @app.cell
-def _(user_map):
-    user_map.value
+def _(destinations, go, mo, user_locations):
+    user_fig = go.Figure([
+        go.Scattermap(name="users", lat=user_locations["lat"], lon=user_locations["lon"], hovertext=user_locations["name"], opacity=0.5, mode="markers"),
+        go.Scattermap(name="destinations", lat=destinations["lat"], hovertext=destinations["Destination"], lon=destinations["lon"], opacity=1, mode="markers"),
+    ])
+
+    user_fig.update_layout(
+        showlegend=True, margin=dict(l=0, r=0, t=0, b=0), mapbox=dict(center=dict(lon=52, lat=2), zoom=10)
+    )
+    user_map = mo.ui.plotly(user_fig)
+    user_map
     return
+
+
+@app.cell
+def _(engine, mo):
+    destinations = mo.sql(
+        f"""
+         select Destination, st_y(geom) as lat, st_x(geom) as lon from destinations;
+        """,
+        output=False,
+        engine=engine
+    )
+    return (destinations,)
 
 
 @app.cell
@@ -73,11 +76,11 @@ def _(mo, users):
     user_names = {f"{u[1]} {u[2]}":str(u[0]) for u in users.rows()}
     selected_user = mo.ui.dropdown(user_names, searchable=True, allow_select_none=False, value=list(user_names.keys())[0])
     selected_user
-    return
+    return (selected_user,)
 
 
 @app.cell
-def _(engine, mo, user_map):
+def _(destinations, engine, mo, selected_user, users):
     recommendations = mo.sql(
         f"""
         select
@@ -103,7 +106,7 @@ def _(engine, mo, user_map):
         from recommendations r
             join destinations d on r.destination_id = d.id
             join users u on r.user_id = u.id
-        where user_id in {user_map.value.keys()}
+        where user_id = {selected_user.value}
         """,
         engine=engine
     )
