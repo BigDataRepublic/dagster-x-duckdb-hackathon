@@ -42,28 +42,3 @@ def recommendations(duckdb: DuckDBResource) -> dg.MaterializeResult:
         count = count[0]
 
         return dg.MaterializeResult(metadata={"preview": dg.MetadataValue.md(df.to_markdown()), "rows": count})
-
-
-@dg.asset(kinds={"duckdb", "gold"}, deps=[recommendations], group_name="recommendations")
-def recommendations_dashboard(duckdb: DuckDBResource) -> dg.MaterializeResult:
-    with duckdb.get_connection() as conn:
-        conn.execute("""
-                     CREATE OR REPLACE TABLE recommendations_dashboard AS
-                        SELECT
-                            u.id,
-                            u.first_name,
-                            u.last_name,
-                            d.id,
-
-                        FROM recommendations r
-                            JOIN users u
-                                ON r.user_id = u.id
-                            JOIN destinations d
-                                ON r.destination_id = d.id
-                     """)
-
-        df = conn.execute("SELECT * FROM recommendations_dashboard LIMIT 10").df()
-        count = conn.execute("SELECT count(*) FROM recommendations_dashboard").fetchone() or (0,)
-        count = count[0]
-
-        return dg.MaterializeResult(metadata={"preview": dg.MetadataValue.md(df.to_markdown()), "rows": count})

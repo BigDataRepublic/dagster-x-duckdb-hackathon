@@ -63,7 +63,7 @@ def _(destinations, go, mo, user_locations):
 def _(engine, mo):
     destinations = mo.sql(
         f"""
-         select Destination, st_y(geom) as lat, st_x(geom) as lon from destinations;
+        select Destination, st_y(geom) as lat, st_x(geom) as lon from destinations;
         """,
         output=False,
         engine=engine
@@ -169,12 +169,6 @@ def _(go, mo, recommendations):
 @app.cell
 def _(map):
     map
-    return
-
-
-@app.cell
-def _(map):
-    map.value
     return
 
 

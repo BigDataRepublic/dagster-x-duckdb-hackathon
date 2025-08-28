@@ -6,6 +6,9 @@ dependencies = [
     "dagster==1.10.19",
     "dagster-duckdb>=0.26.19",
     "dagster-duckdb-pandas>=0.26.19",
+    "openmeteo-requests>=1.7.1",
+    "requests-cache>=1.2.1",
+    "retry-requests>=2.0.0",
 ]
 
 [dependency-groups]

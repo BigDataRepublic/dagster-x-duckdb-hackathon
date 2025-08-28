@@ -145,7 +145,7 @@ def weather_forecast(duckdb: DuckDBResource) -> dg.MaterializeResult:
                             monthname(date) as month,
                             avg(temperature_2m_mean) as temperature_mean,
                             avg(temperature_2m_max) as temperature_max,
-                        FROM WEATHER
+                        FROM weather
                         GROUP BY
                             destination_id, month
                      """)
