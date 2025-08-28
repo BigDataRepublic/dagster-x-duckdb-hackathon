@@ -27,12 +27,12 @@ def recommendations(duckdb: DuckDBResource) -> dg.MaterializeResult:
                             row_number() over (PARTITION BY u.id ORDER BY total_penalty) as rank,
                         FROM connections c
                             JOIN users u
-                                ON u.id = c.user_id
+                                ON u.id = c.users_id
                                 AND u.preferred_transport_mode = c.transport_mode
                             JOIN destinations d
-                                ON d.id = c.destination_id
+                                ON d.id = c.destinations_id
                             JOIN weather_forecast w
-                                ON w.destination_id = c.destination_id
+                                ON w.destination_id = c.destinations_id
                         QUALIFY
                             rank <= 8;
                      """)

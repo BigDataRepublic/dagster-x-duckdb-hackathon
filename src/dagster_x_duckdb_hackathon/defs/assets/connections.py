@@ -3,7 +3,7 @@ from dagster_duckdb import DuckDBResource
 
 
 def build_nearest_hub_asset(location_asset_key: str, hub_asset_key: str) -> dg.AssetsDefinition:
-    asset_key = f"nearest_{location_asset_key}_{hub_asset_key}"
+    asset_key = f"{location_asset_key}_{hub_asset_key}"
 
     @dg.asset(
         name=asset_key,
@@ -39,13 +39,13 @@ def connections_train_stations(context, duckdb: DuckDBResource) -> None:
         conn.execute("""
                      CREATE OR REPLACE TABLE connections_train_stations AS
                         SELECT DISTINCT
-                            o.user_id,
-                            d.destination_id,
+                            o.users_id,
+                            d.destinations_id,
                             ST_Distance_Sphere(o.geom, d.geom) as connection_distance,
                             'train' as transport_mode,
                             connection_distance / 1000 / 100 as travel_time
                         FROM
-                            user_train_stations o CROSS JOIN destinations_train_stations d
+                            users_train_stations o CROSS JOIN destinations_train_stations d
                      """)
 
         df = conn.execute("SELECT * FROM connections_train_stations LIMIT 10").df()
@@ -62,13 +62,13 @@ def connections_airports(context, duckdb: DuckDBResource) -> None:
         conn.execute("""
                      CREATE OR REPLACE TABLE connections_airports AS
                         SELECT DISTINCT
-                            o.user_id,
-                            d.destination_id,
+                            o.users_id,
+                            d.destinations_id,
                             ST_Distance_Sphere(o.geom, d.geom) as connection_distance,
                             'flight' as transport_mode,
                             connection_distance / 1000 / 500 as travel_time
                         FROM
-                            user_airports o CROSS JOIN destinations_airports d
+                            users_airports o CROSS JOIN destinations_airports d
                      """)
 
         df = conn.execute("SELECT * FROM connections_airports LIMIT 10").df()
