@@ -1,8 +1,14 @@
-# bdr-dagster-hackaton
+# BDR Dagster Hackathon
 
-## Installation
-1. `git clone git@github.com:consumer-tech/intelligent-data-platform.git`
-2. `cd bdr-dagster-hackaton`
-3. `uv sync --dev`
-4. `export DAGSTER_HOME=/tmp/bdr_dagster_hackaton`
-5. `uv run dg dev`
+## Setup
+
+### System requirements
+
+* Install DuckDB, preferrably globally with `brew install duckdb`
+
+### Project installation
+
+1. Sync you local development environment with: `uv sync --dev`
+2. Set an environment variable with `export DAGSTER_HOME=/tmp/bdr_dagster_hackaton`
+3. Start Dagster with `uv run dg dev` and open the [web UI](http://127.0.0.1:3000)
+4. Open the marimo dashboard with `uv run marimo run dashboard.py`
