@@ -48,7 +48,7 @@ name your branch something like `hackathon-task2-inge` and commit your changes.
 
 ## Assignments
 
-### Task 1: Create your first asset
+### Task 1: Create your first asset :seedling:
 
 _Create a new asset from a CSV about potential holiday destinations._
 
@@ -63,7 +63,7 @@ materializing your new asset.
 function to read in longitude and latitude as a GEOMETRY type (from the 
 spatial extension).
 
-### Task 2: Computed asset
+### Task 2: Computed asset :cactus:
 
 _Create assets that link the users with potential destinations, calculating the
 shortest distance and travel time._
@@ -106,7 +106,7 @@ With the following schema:
 * `transport_mode` – 'train' or 'flight'.
 * `travel_time` – estimated based on connection_distance.
 
-### Task 3: External asset
+### Task 3: External asset :sun_with_face:
 
 _Query an (external) API for weather data._
 
@@ -120,7 +120,7 @@ You can try to create an asset that reads from the API directly by reading the [
 **NOTE**: Alternatively, use the [get_historical_data](./data/get_historical_data.py) script to dump the historical
 data to a file, and proceed like before by reading CSV files.
 
-### Task 4: Open ended
+### Task 4: Open ended :rocket:
 
 Generate travel recommendations.
 
