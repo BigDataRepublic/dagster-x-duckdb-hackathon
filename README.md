@@ -63,6 +63,8 @@ materializing your new asset.
 function to read in longitude and latitude as a GEOMETRY type (from the 
 spatial extension).
 
+---
+
 ### :rabbit2: Task 2: Computed asset
 
 _Create assets that link the users with potential destinations, calculating the
@@ -106,6 +108,8 @@ With the following schema:
 * `transport_mode` – 'train' or 'flight'.
 * `travel_time` – estimated based on connection_distance.
 
+---
+
 ### :sun_with_face: Task 3: External asset
 
 _Query an (external) API for weather data._
@@ -119,6 +123,8 @@ You can try to create an asset that reads from the API directly by reading the [
 
 **NOTE**: Alternatively, use the [get_historical_data](./data/get_historical_data.py) script to dump the historical
 data to a file, and proceed like before by reading CSV files.
+
+---
 
 ### :rocket: Task 4: Open ended
 
