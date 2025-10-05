@@ -36,6 +36,7 @@ name your branch something like `hackathon-task2-inge` and commit your changes.
 * Python :)
 * [uv](https://docs.astral.sh/uv/guides/install-python/) Python package manager. 
 * Install DuckDB, for example with `brew install duckdb`
+* Generate user data with: `uv run data/usergen.py`
 
 ### Project installation
 
@@ -43,34 +44,81 @@ name your branch something like `hackathon-task2-inge` and commit your changes.
 2. Set an environment variable with `export DAGSTER_HOME=/tmp/bdr_dagster_hackaton`
 3. Start Dagster with `uv run dg dev` and open the [web UI](http://127.0.0.1:3000)
 
+**NOTE**: ignore the sensor errors in the terminal for now.
+
 ## Assignments
 
-### Task 1: Simple asset
+### Task 1: Create your first asset
 
-Create a new asset from a CSV about potential holiday destinations.
+_Create a new asset from a CSV about potential holiday destinations._
 
-To start you off on your Dagster journey, you are given a CSV file.
+To start you off on your Dagster journey, you are given a CSV file. Create a
+new asset called `destinations` and read in all the columns from the CSV,
+giving each row a unique ID.
 
-#### BONUS
+Test out your solution by starting the local Dagster instance and 
+materializing your new asset.
 
-Make it a sensor
+**TIP**: you can use the [st_point](https://duckdb.org/docs/stable/core_extensions/spatial/functions.html#st_point)
+function to read in longitude and latitude as a GEOMETRY type (from the 
+spatial extension).
 
 ### Task 2: Computed asset
 
-Create an asset linking users with potential destinations, with the calculated
-shortest distance and transport mode, with the travel time. 
+_Create assets that link the users with potential destinations, calculating the
+shortest distance and travel time._
 
-HINT: you can generate assets programmatically using functions.
+This will help us select optimal routes for our holiday ideas later on.
+
+Alongside our `destinations` asset, you are now given the following new assets:
+* [users](./src/dagster_x_duckdb_hackathon/defs/assets/users.py)
+* [airports](./src/dagster_x_duckdb_hackathon/defs/assets/hubs.py)
+* [train_stations](./src/dagster_x_duckdb_hackathon/defs/assets/hubs.py)
+
+(Materialize the `users` asset in the UI to resolve the sensor error in the terminal)
+
+As well as a helper function [build_nearest_hub_asset](./src/dagster_x_duckdb_hackathon/defs/assets/connections.py)
+that can dynamically generate an asset that represents closest connections by 
+geometric distance.
+
+#### Part 1:
+
+Create the following (intermediate) computed assets:
+* `destinations_airports`
+* `destinations_train_stations`
+* `users_airports`
+* `users_train_stations`
+
+Linking all users and destinations with all transport hubs, using the 
+`build_nearest_hub_asset` helper function.
+
+#### Part 2:
+
+Create the following computed assets:
+* `connections_train_stations` – using `users_train_stations` and `destinations_train_stations`
+* `connections_airports` – using `users_airports` and `destinations_airports`
+* `connections` (union of the two above)
+
+With the following schema:
+* `users_id` – an ID from the users table.
+* `destinations_id` – and ID from the destinations table.
+* `connection_distance` – (linear) distance between the two.
+* `transport_mode` – 'train' or 'flight'.
+* `travel_time` – estimated based on connection_distance.
 
 ### Task 3: External asset
 
-Query an (external) API for weather data.
+_Query an (external) API for weather data._
 
-NOTE: if we get rate limited, ask for static files instead :)
+In order to select the right kind of holiday destination we would like to use
+weather data to match it with our users' preferences.
 
-#### BONUS 
+Create an asset that reads historical weather data from Open Meteo. 
 
-Use partitioning
+You can try to create an asset that reads from the API directly by reading the [Dagster docs](https://docs.dagster.io/guides/build/external-resources/connecting-to-apis).
+
+**NOTE**: Alternatively, use the [get_historical_data](./data/get_historical_data.py) script to dump the historical
+data to a file, and proceed like before by reading CSV files.
 
 ### Task 4: Open ended
 
@@ -79,15 +127,6 @@ Generate travel recommendations.
 There is a solution available, but you are free to experiment and find things out on your own.
 
 ## Debugging
-
-### Getting static data
-
-TODO
-`usergen.py`
-
-### Sensors, partitions, resources and definitions
-
-...
 
 ### DuckDB
 
@@ -108,3 +147,9 @@ SELECT
     st_point(longitude::double, latitude::double) as geom
 FROM 'data/destinations.csv';
 ```
+
+### Marimo notebooks
+
+Enter edit mode for the dashboard with: `uv run marimo edit dashboard.py`
+
+Marimo tutorial: `uv run marimo tutorial intro`

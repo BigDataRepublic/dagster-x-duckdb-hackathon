@@ -9,7 +9,7 @@ from dagster_duckdb import DuckDBResource
 def users_file():
     content = Path("data/users.csv").read_text()
     content_hash = sha256(content.encode()).hexdigest()
-    return dg.DataVersion(content_hash)
+    return dg.DataVersion(content_hash)  # Checks whether the file changes
 
 
 @dg.asset(kinds={"duckdb", "bronze"}, deps=[users_file], group_name="users")
