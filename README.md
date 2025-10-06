@@ -22,6 +22,7 @@ can be accessed by checking out a different branch:
 * `hackathon-task1` – ready for the implementation of Task 1.
 * `hackathon-task2` – ready for the implementation of Task 2.
 * `hackathon-task3` – ready for the implementation of Task 3.
+* `hackathon-task4` – ready for the implementation of Task 4.
 * `hackathon-final` – our full solution, with a suggestion left open-ended for
  expansion.
 
@@ -52,6 +53,8 @@ name your branch something like `hackathon-task2-inge` and commit your changes.
 
 _Create a new asset from a CSV about potential holiday destinations._
 
+Branch: `hackathon-task1`
+
 To start you off on your Dagster journey, you are given a CSV file. Create a
 new asset called `destinations` and read in all the columns from the CSV,
 giving each row a unique ID.
@@ -69,6 +72,8 @@ spatial extension).
 
 _Create assets that link the users with potential destinations, calculating the
 shortest distance and travel time._
+
+Branch: `hackathon-task2`
 
 This will help us select optimal routes for our holiday ideas later on.
 
@@ -114,6 +119,8 @@ With the following schema:
 
 _Query an (external) API for weather data._
 
+Branch: `hackathon-task3`
+
 In order to select the right kind of holiday destination we would like to use
 weather data to match it with our users' preferences.
 
@@ -128,9 +135,21 @@ data to a file, and proceed like before by reading CSV files.
 
 ### :rocket: Task 4: Open ended
 
-Generate travel recommendations.
+_Generate travel recommendations based on input data._
 
-There is a solution available, but you are free to experiment and find things out on your own.
+Branch: `hackathon-task4`
+
+Now that we have collected and processed data from different sources,
+we are ready to generate travel recommendations for our users.
+
+The solution is meant to be open-ended. One solution would be to use
+`travel_time` and `preferred_temperature` to rank destinations for all users.
+
+You may also think about expand on the given input data, or even plugging in a 
+`scikit-learn` model [into Dagster](https://docs.dagster.io/guides/build/ml-pipelines/ml-pipeline). 
+
+**NOTE**: We have provided a solution in the `hackathon-final` branch, but 
+you are encouraged to experiment and find things out on your own.
 
 ## Debugging
 
