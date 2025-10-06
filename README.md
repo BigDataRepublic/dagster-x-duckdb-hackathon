@@ -95,6 +95,8 @@ uv run marimo run dashboard.py
 
 The data assets as described, however, are not fully implemented yet. That's where you come in. By completing the following assignments, we will bring together the recommondation pipeline one step at a time. We will start off with a quick introduction to Dagster's most important features. 
 
+Please note, if you ever get stuck, please reach out or check the final solution branch `hackathon-final` for inspiration.
+
 ### :seedling: Task 1: Create your first asset
 
 _Create a new asset from a CSV about potential holiday destinations._
@@ -200,6 +202,21 @@ You may also think about expanding on the given input data by defining new asset
 you are encouraged to experiment and find things out on your own.
 
 **NOTE**: Don't forget about the marimo dashboard! 
+
+### :books: Task 5 (bonus round): Data engineering improvements 
+
+_Explore Dagster's features regarding data engineering_
+
+Branch: `hackathon-task4`
+
+Dagster offers a lot of features related to data engineering. In this bonus assignment, you're encouraged to implement (in order of increasing complexity): 
+
+- Add relevant metadata to the implemented assets 
+- Making an asset parameterizable through `@asset(config_schema=...)`
+- Different types of partitioning, considering which makes the most sense for our assets
+- Explore `@dg.observable_source_asset` and `@dg.sensor` to check data freshness
+
+**NOTE**: We also included implementations of these features in the `hackathon-final` branch.
 
 ## Debugging
 
