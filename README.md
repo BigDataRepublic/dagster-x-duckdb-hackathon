@@ -47,7 +47,55 @@ name your branch something like `hackathon-task2-inge` and commit your changes.
 
 **NOTE**: ignore the sensor errors in the terminal for now.
 
+## Asset overview
+At the heart of this project are the Dagster assets that bring our dream-holiday recommendation engine to life. Think of these assets as the different departments of our little startup: each one has a role to play in turning raw data into personalized travel advice for our customers.
+
+### Core Data Assets
+
+This is where we gather the foundational information – our raw ingredients.
+
+- **Users**: Who are our customers, where do they live, and what do they prefer (temperature, travel time, transport mode)?
+
+- **Destinations**: A collection of possible holiday spots across Europe, enriched with geospatial points.
+
+- **Airports**: Large airports across Europe, filtered from open data sources.
+
+- **Train Stations**: Major European train stations, ensuring connectivity for rail-loving travelers.
+
+- **Historic Weather**: Yearly weather data for destinations, fetched from the [Open-Meteo API](https://open-meteo.com/en/docs)
+
+### Connections & Enrichment
+
+Here we process and combine the data, much like planning out the routes, tickets and weather info that make trips feasible.
+
+**Nearest Hubs**: For both users and destinations, we find the closest airports and train stations.
+
+**Connections (Airports & Train Stations)**: Calculate travel distances and approximate travel times between users and destinations by different modes of transport.
+
+**Unified Connections**: Merge air and rail connections into a single dataset for comparison.
+
+**Weather Forecast**: From raw weather data, we aggregate average monthly conditions so customers know what to expect.
+
+### Recommendations
+
+Finally, the magic happens. This is where we bring everything together into a recommendation engine.
+
+**Recommendations**: For each user, we combine travel preferences, weather forecasts and travel connections to generate ranked holiday suggestions. We calculate a “penalty score” for each option (based on mismatches in travel time and preferred temperature) and return the top destinations.
+
+### Marimo
+
+Once we have our recommendations, we can have a look at them in marimo by running 
+
+```
+uv run marimo run dashboard.py
+```
+
+
 ## Assignments
+
+The data assets as described, however, are not fully implemented yet. That's where you come in. By completing the following assignments, we will bring together the recommondation pipeline one step at a time. We will start off with a quick introduction to Dagster's most important features. 
+
+Please note, if you ever get stuck, please reach out or check the final solution branch `hackathon-final` for inspiration.
 
 ### :seedling: Task 1: Create your first asset
 
@@ -61,6 +109,8 @@ giving each row a unique ID.
 
 Test out your solution by starting the local Dagster instance and 
 materializing your new asset.
+
+**TIP**: utilize Dagster's quick feedback loop with `uv run dg dev`
 
 **TIP**: you can use the [st_point](https://duckdb.org/docs/stable/core_extensions/spatial/functions.html#st_point)
 function to read in longitude and latitude as a GEOMETRY type (from the 
@@ -142,14 +192,31 @@ Branch: `hackathon-task4`
 Now that we have collected and processed data from different sources,
 we are ready to generate travel recommendations for our users.
 
-The solution is meant to be open-ended. One solution would be to use
+The solution of this assignment is meant to be open-ended. One solution would be to use
 `travel_time` and `preferred_temperature` to rank destinations for all users.
 
-You may also think about expand on the given input data, or even plugging in a 
+You may also think about expanding on the given input data by defining new assets or even plugging in a 
 `scikit-learn` model [into Dagster](https://docs.dagster.io/guides/build/ml-pipelines/ml-pipeline). 
 
-**NOTE**: We have provided a solution in the `hackathon-final` branch, but 
+**NOTE**: As mentioned in the data overview section, we have provided a ranking solution in the `hackathon-final` branch as an example. However, 
 you are encouraged to experiment and find things out on your own.
+
+**NOTE**: Don't forget about the marimo dashboard! 
+
+### :books: Task 5 (bonus round): Data engineering improvements 
+
+_Explore Dagster's features regarding data engineering_
+
+Branch: `hackathon-task4`
+
+Dagster offers a lot of features related to data engineering. In this bonus assignment, you're encouraged to implement (in order of increasing complexity): 
+
+- Add relevant metadata to the implemented assets 
+- Making an asset parameterizable through `@asset(config_schema=...)`
+- Different types of partitioning, considering which makes the most sense for our assets
+- Explore `@dg.observable_source_asset` and `@dg.sensor` to check data freshness
+
+**NOTE**: We also included implementations of these features in the `hackathon-final` branch.
 
 ## Debugging
 
