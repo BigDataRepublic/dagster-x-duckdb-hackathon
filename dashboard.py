@@ -5,22 +5,6 @@ app = marimo.App(layout_file="layouts/dashboard.grid.json")
 
 
 @app.cell
-def _():
-    import marimo as mo
-    return (mo,)
-
-
-@app.cell
-def _():
-    import duckdb
-
-    DATABASE_URL = "db.duckdb"
-    engine = duckdb.connect(DATABASE_URL, read_only=True)
-    engine.execute("load spatial;");
-    return (engine,)
-
-
-@app.cell
 def _(engine, mo):
     users = mo.sql(
         f"""
@@ -101,8 +85,8 @@ def _(destinations, engine, mo, selected_user, users):
             u.preferred_transport_mode,
             r.travel_time,
             u.preferred_travel_time,
-            r.temperature_max,
-            r.preferred_temperature
+            r.temperature_max
+            -- r.preferred_temperature
         from recommendations r
             join destinations d on r.destination_id = d.id
             join users u on r.user_id = u.id
@@ -123,7 +107,7 @@ def _():
 def _(mo, recommendations):
     u = recommendations.rows(named=True)[0]
     mo.md(f"""
-    {u["first_name"]} {u["last_name"]} from {u["hometown"]} likes to travel by **{u["preferred_transport_mode"]}** for around **{u["preferred_travel_time"]} hours** to a destination with a temperature of **{u["preferred_temperature"]}C**.
+    {u["first_name"]} {u["last_name"]} from {u["hometown"]} likes to travel by **{u["preferred_transport_mode"]}** for around **{u["preferred_travel_time"]} hours.** 
     """)
     return
 
@@ -175,6 +159,22 @@ def _(map):
 @app.cell
 def _():
     return
+
+
+@app.cell
+def _():
+    import marimo as mo
+    return (mo,)
+
+
+@app.cell
+def _():
+    import duckdb
+
+    DATABASE_URL = "db.duckdb"
+    engine = duckdb.connect(DATABASE_URL, read_only=True)
+    engine.execute("load spatial;");
+    return (engine,)
 
 
 if __name__ == "__main__":
