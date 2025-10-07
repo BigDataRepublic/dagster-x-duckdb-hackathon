@@ -50,6 +50,8 @@ name your branch something like `hackathon-task2-inge` and commit your changes.
 ## Asset overview
 At the heart of this project are the Dagster assets that bring our dream-holiday recommendation engine to life. Think of these assets as the different departments of our little startup: each one has a role to play in turning raw data into personalized travel advice for our customers.
 
+![asset_overview.png](asset_overview.png)
+
 ### Core Data Assets
 
 This is where we gather the foundational information – our raw ingredients.
@@ -202,6 +204,8 @@ You may also think about expanding on the given input data by defining new asset
 you are encouraged to experiment and find things out on your own.
 
 **NOTE**: Don't forget about the marimo dashboard! 
+
+---
 
 ### :books: Task 5 (bonus round): Data engineering improvements 
 
