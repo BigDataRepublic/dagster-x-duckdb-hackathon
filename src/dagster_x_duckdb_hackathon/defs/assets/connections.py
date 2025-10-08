@@ -21,8 +21,7 @@ def build_nearest_hub_asset(location_asset_key: str, hub_asset_key: str) -> dg.A
                                 ST_Distance_Sphere(d.geom, t.geom) as distance,
                                 t.geom as geom,
                             FROM
-                                destinations d CROSS JOIN {hub_asset_key} t
-                                # TODO: double check if can change `destinations` to `location_asset_key`
+                                {location_asset_key} d CROSS JOIN {hub_asset_key} t
                             QUALIFY
                                 row_number() OVER (PARTITION BY {location_asset_key}_id ORDER BY distance) = 1
                         """)
