@@ -14,21 +14,18 @@ The **assignments** are also listed further in this document.
 
 ## How to use this repo
 
-We will teach different ways to use Dagster through several tasks. Each task
-can be accessed by checking out a different branch:
+We will teach different ways to use Dagster through several tasks. The tasks
+are available on the `main` branch and are listed in this README. We also 
+offer our own solution on the `hackathon-final` branch.
 
-* `main` – contains only the instructions on how to setup your local 
- environment and to use this repo.
-* `hackathon-task1` – ready for the implementation of Task 1.
-* `hackathon-task2` – ready for the implementation of Task 2.
-* `hackathon-task3` – ready for the implementation of Task 3.
-* `hackathon-task4` – ready for the implementation of Task 4.
-* `hackathon-final` – our full solution, with a suggestion left open-ended for
- expansion.
+While you are expected to code up your own solution to the tasks below,
+you are encouraged to consult with online documentation, for example:
 
-**NOTE**: We advise you to create a new branch when working on your tasks,
-as we will be providing a working solution after each step. For example,
-name your branch something like `hackathon-task2-inge` and commit your changes.
+* Dagster docs:
+  * [Defining assets](https://docs.dagster.io/guides/build/assets/defining-assets)
+  * [Build your first ETL pipeline](https://docs.dagster.io/examples/full-pipelines/etl-pipeline)
+* DuckDB:
+  * [Spatial functions](https://duckdb.org/docs/stable/core_extensions/spatial/functions.html)
 
 ## Setup
 
@@ -92,6 +89,7 @@ Once we have our recommendations, we can have a look at them in marimo by runnin
 uv run marimo run dashboard.py
 ```
 
+---
 
 ## Assignments
 
@@ -99,33 +97,70 @@ The data assets as described, however, are not fully implemented yet. That's whe
 
 Please note, if you ever get stuck, please reach out or check the final solution branch `hackathon-final` for inspiration.
 
-### :seedling: Task 1: Create your first asset
+### :egg: Task 1: Getting started
 
-_Create a new asset from a CSV about potential holiday destinations._
+_Start a local Dagster instance and materialize an asset._
 
-Branch: `hackathon-task1`
+To start you off on your Dagster journey, we have provided you with some 
+initial code. It includes a [users](./src/dagster_x_duckdb_hackathon/defs/assets/users.py) 
+asset, based off of the [users.csv](./data/users.csv), and a sensor
+functionality which monitors for changes in the source file (optional feature
+that you do not need to implement further on).
 
-To start you off on your Dagster journey, you are given a CSV file. Create a
-new asset called `destinations` and read in all the columns from the CSV,
-giving each row a unique ID.
+Your task is to setup your local environment, start a local Dagster instance
+(`uv run dg dev`), and materialize your first asset.
+
+Once you have a local Dagster instance running, navigate to the "Assets" section
+in the top menu bar, then click on "View lineage" and select the `users` asset,
+and finally click to "Materialize" it. This should start a new run, whose 
+execution you can also follow.
+
+Once the asset has been materialized, you should be able to preview some data in
+the UI, under the "Latest materialization" section.
+
+(Materializing the `users` asset in the UI also resolves the sensor error in the terminal!)
+
+---
+
+### :seedling: Task 2: Creating simple assets
+
+_Create assets from CSVs as inputs._
+
+#### Part I – You very own first asset:
+
+Now you are ready to code your own first asset from scratch!
+
+Given the CSV file [destinations.csv](./data/destinations.csv), and the file
+[destinations.py](./src/dagster_x_duckdb_hackathon/defs/assets/destinations.py)
+(where you can start coding your solution), create a new asset called 
+`destinations` and read in all the columns from the CSV, giving each row a 
+unique ID.
 
 Test out your solution by starting the local Dagster instance and 
-materializing your new asset.
-
-**TIP**: utilize Dagster's quick feedback loop with `uv run dg dev`
+materializing your new asset in the UI, just like you did in Task 1.
 
 **TIP**: you can use the [st_point](https://duckdb.org/docs/stable/core_extensions/spatial/functions.html#st_point)
 function to read in longitude and latitude as a GEOMETRY type (from the 
 spatial extension).
 
+#### Part II - Two more!:
+
+After creating the `desinations` asset, you can continue creating two more
+simple assets:
+
+* `airports` – based off the [airports.csv](./data/airports.csv)
+* `train_stations` – based off the [train_stations_europe.csv](./data/train_stations_europe.csv)
+
+You can create the new assets in their own files (or a single new file) in the 
+`assets` directory alongside the `destinations` asset you've coded previously.
+Remember to materialize them in the UI to test out your solution.
+
 ---
 
-### :rabbit2: Task 2: Computed asset
+### :rabbit2: Task 3: Computed asset
 
 _Create assets that link the users with potential destinations, calculating the
 shortest distance and travel time._
-
-Branch: `hackathon-task2`
 
 This will help us select optimal routes for our holiday ideas later on.
 
@@ -136,11 +171,11 @@ Alongside our `destinations` asset, you are now given the following new assets:
 
 (Materialize the `users` asset in the UI to resolve the sensor error in the terminal)
 
-As well as a helper function [build_nearest_hub_asset](./src/dagster_x_duckdb_hackathon/defs/assets/connections.py)
+Take note of the helper function [build_nearest_hub_asset](./src/dagster_x_duckdb_hackathon/defs/assets/connections.py)
 that can dynamically generate an asset that represents closest connections by 
 geometric distance.
 
-#### Part 1:
+#### Part I - Intermediate assets:
 
 Create the following (intermediate) computed assets:
 * `destinations_airports`
@@ -151,7 +186,7 @@ Create the following (intermediate) computed assets:
 Linking all users and destinations with all transport hubs, using the 
 `build_nearest_hub_asset` helper function.
 
-#### Part 2:
+#### Part II – Connecting it all together:
 
 Create the following computed assets:
 * `connections_train_stations` – using `users_train_stations` and `destinations_train_stations`
@@ -167,11 +202,9 @@ With the following schema:
 
 ---
 
-### :sun_with_face: Task 3: External asset
+### :sun_with_face: Task 4: External asset
 
 _Query an (external) API for weather data._
-
-Branch: `hackathon-task3`
 
 In order to select the right kind of holiday destination we would like to use
 weather data to match it with our users' preferences.
@@ -185,11 +218,9 @@ data to a file, and proceed like before by reading CSV files.
 
 ---
 
-### :rocket: Task 4: Open ended
+### :rocket: Task 5: Open ended
 
 _Generate travel recommendations based on input data._
-
-Branch: `hackathon-task4`
 
 Now that we have collected and processed data from different sources,
 we are ready to generate travel recommendations for our users.
@@ -207,11 +238,9 @@ you are encouraged to experiment and find things out on your own.
 
 ---
 
-### :books: Task 5 (bonus round): Data engineering improvements 
+### :books: Task 6 (bonus round): Data engineering improvements 
 
 _Explore Dagster's features regarding data engineering_
-
-Branch: `hackathon-task4`
 
 Dagster offers a lot of features related to data engineering. In this bonus assignment, you're encouraged to implement (in order of increasing complexity): 
 
@@ -227,6 +256,10 @@ Dagster offers a lot of features related to data engineering. In this bonus assi
 ### DuckDB
 
 Start DuckDB with this project's database with: `duckdb db.duckdb`
+
+**NOTE**: Opening up the DuckDB client in the terminal will block the database
+connection for Dagster itself! So make sure you exit it before materializing 
+assets.
 
 Type `.help` for a list of commands, but otherwise you can use it in a similar
 way to other SQL database. Some examples:
@@ -245,6 +278,8 @@ FROM 'data/destinations.csv';
 ```
 
 ### Marimo notebooks
+
+Some tips on using the [Marimo notebooks](https://docs.marimo.io/#a-reactive-programming-environment):
 
 Enter edit mode for the dashboard with: `uv run marimo edit dashboard.py`
 

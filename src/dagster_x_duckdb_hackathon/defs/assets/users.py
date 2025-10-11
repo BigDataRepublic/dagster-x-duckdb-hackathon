@@ -31,7 +31,12 @@ def users(duckdb: DuckDBResource) -> dg.MaterializeResult:
                         FROM 'data/users.csv'
                      """)
 
-        df = conn.execute("SELECT * FROM users LIMIT 10").df()
+        sample_df = conn.execute("SELECT * FROM users LIMIT 10").df()
         count = conn.execute("SELECT count(*) FROM users").fetchone() or (0,)
         count = count[0]
-        return dg.MaterializeResult(metadata={"preview": dg.MetadataValue.md(df.to_markdown()), "rows": count})
+        return dg.MaterializeResult(
+            metadata={
+                "preview": dg.MetadataValue.md(sample_df.to_markdown()),
+                "rows": count,
+            }
+        )
