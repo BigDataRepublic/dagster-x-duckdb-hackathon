@@ -97,6 +97,8 @@ The data assets as described, however, are not fully implemented yet. That's whe
 
 Please note, if you ever get stuck, please reach out or check the final solution branch `hackathon-final` for inspiration.
 
+---
+
 ### :egg: Task 1: Getting started
 
 _Start a local Dagster instance and materialize an asset._
